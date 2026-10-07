@@ -1,7 +1,7 @@
 
 import api from "@/lib/axios";
 import { ApiResponse } from "@/types/apiType";
-import { Follow,Follow2 } from "@/types/user";
+import { Follow2, FollowUser } from "@/types/user";
 
 
 
@@ -9,10 +9,10 @@ export const getUser = async (id: string) => {
   return await api.get(`/users/${id}`);
 };
 export const getFollowing=async (id: string) => {
-  return await api.get<ApiResponse<Follow[]>>(`/users/${id}/following`);
+  return await api.get<ApiResponse<FollowUser[]>>(`/users/${id}/following`);
 };
 export const getFollowers=async (id: string) => {
-  return await api.get<ApiResponse<Follow[]>>(`/users/${id}/followers`);
+  return await api.get<ApiResponse<FollowUser[]>>(`/users/${id}/followers`);
 };
 export const toggleFollow = async (userId: string) => {
   return api.post<Follow2>(`/users/${userId}/follow`);

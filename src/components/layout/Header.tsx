@@ -7,12 +7,14 @@ import type { RootState } from "@/store/store";
 import LogoutButton from "@/components/auth/LogoutButton";
 import { useState, useEffect } from "react";
 import { addHistory, getHistory } from "@/api/search";
+import Link from "next/link";
 
 export default function Header() {
   const router = useRouter();
   const { user, isLoggedIn } = useSelector((state: RootState) => state.auth);
   const [query, setQuery] = useState("");
   const [searchRe, setSearchRe] = useState<string[]>([]);
+  const [showSearch, setShowSearch] = useState(false);
   const handleSearch = async () => {
     try {
       if (isLoggedIn) {
@@ -75,23 +77,42 @@ export default function Header() {
           type="text"
           placeholder="Tìm kiếm..."
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setShowSearch(true);
+          }}
+          onClick={() => {
+            if (!showSearch) setShowSearch(true);
+          }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               handleSearch();
+              setShowSearch(false);
             }
+          }}
+          onBlur={() => {
+            setTimeout(() => {
+              setShowSearch(false);
+            }, 200);
           }}
           className="w-full rounded-full bg-gray-100 dark:bg-white/10 px-5 py-3 outline-none focus:ring-2 focus:ring-black"
         />
-        {query.length > 0 && (
+        {showSearch && query.length > 0 && (
           <div className="absolute top-full left-0 right-0 p-4 bg-white dark:bg-black w-full">
             {searchRe.map((history, index) => (
-              <div
+              <Link
+                href={`/search?q=${encodeURIComponent(history)}`}
                 key={index}
                 className="flex items-center gap-2 cursor-pointer"
               >
-                <p onClick={() => handleSearch()}>{history}</p>
-              </div>
+                <p
+                  onClick={() => {
+                    setShowSearch(false);
+                  }}
+                >
+                  {history}
+                </p>
+              </Link>
             ))}
           </div>
         )}

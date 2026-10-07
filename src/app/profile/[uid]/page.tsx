@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getFollowing, getFollowers } from "@/api/user";
 import { getProfile, updateProfile } from "@/api/profile";
 import { Follow } from "@/types/user";
 import { Profile } from "@/types/profile";
